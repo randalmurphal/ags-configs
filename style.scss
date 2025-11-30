@@ -1,0 +1,933 @@
+// ============================================================================
+// AGS STYLE - Dark Purple Theme (GTK4) - macOS-inspired
+// ============================================================================
+
+$bg-dark: #0d0d0d;
+$bg-surface: #121218;
+$bg-elevated: #1a1a2e;
+$bg-hover: #252538;
+$purple-primary: #9d4edd;
+$purple-secondary: #7b2cbf;
+$purple-dim: #5a189a;
+$purple-glow: rgba(157, 78, 221, 0.3);
+$purple-subtle: rgba(157, 78, 221, 0.08);
+$text-primary: #e0e0e0;
+$text-secondary: #a0a0a0;
+$text-dim: #606060;
+$red-accent: #e84057;
+$green-accent: #50fa7b;
+$border-subtle: rgba(255, 255, 255, 0.06);
+
+// ============================================================================
+// SHARED POPUP STYLES - macOS-inspired
+// ============================================================================
+@mixin popup-base {
+  background: transparent;
+  color: $text-primary;
+  font-family: "Hack Nerd Font", "JetBrains Mono Nerd Font", "JetBrains Mono", monospace;
+  font-size: 13px;
+}
+
+@mixin popup-content {
+  background: linear-gradient(180deg, rgba(18, 18, 24, 0.98) 0%, rgba(13, 13, 13, 0.98) 100%);
+  border: 1px solid $border-subtle;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+@mixin smooth-button {
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  border: none;
+
+  &:hover {
+    transition: background 100ms ease, color 100ms ease;
+  }
+}
+
+window.Bar {
+  background: transparent;
+  color: $text-primary;
+  font-family: "Hack Nerd Font", "JetBrains Mono Nerd Font", "JetBrains Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+
+  .centerbox {
+    background: $bg-dark;
+    border-bottom: 2px solid $purple-primary;
+    min-height: 36px;
+    padding: 0 12px;
+  }
+
+  // Workspaces
+  .workspaces {
+    button {
+      min-width: 28px;
+      min-height: 26px;
+      margin: 5px 2px;
+      padding: 0 8px;
+      border-radius: 6px;
+      background: transparent;
+      color: $text-dim;
+
+      &:hover {
+        background: $bg-elevated;
+        color: $text-primary;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, $purple-primary, $purple-secondary);
+        color: #ffffff;
+        font-weight: bold;
+      }
+
+      &.occupied {
+        color: $purple-secondary;
+        background: rgba(157, 78, 221, 0.1);
+      }
+    }
+  }
+
+  // Clients
+  .clients {
+    margin-left: 8px;
+    padding-left: 8px;
+    border-left: 1px solid $bg-elevated;
+
+    button.client {
+      min-width: 30px;
+      min-height: 26px;
+      margin: 5px 2px;
+      padding: 0 6px;
+      border-radius: 6px;
+      background: transparent;
+      color: $text-secondary;
+
+      &:hover {
+        background: $bg-elevated;
+        color: $purple-primary;
+      }
+
+      &.focused {
+        background: $bg-elevated;
+        color: $purple-primary;
+      }
+
+      .client-icon {
+        font-family: "Hack Nerd Font", "Symbols Nerd Font", monospace;
+        font-size: 16px;
+      }
+    }
+  }
+
+  // Clock
+  .clock {
+    padding: 0 16px;
+
+    .time {
+      font-size: 14px;
+      font-weight: bold;
+      color: $text-primary;
+    }
+
+    .date {
+      font-size: 14px;
+      color: $purple-secondary;
+      margin-left: 12px;
+    }
+  }
+
+  // System tray
+  .systray {
+    .systray-btn {
+      min-width: 26px;
+      min-height: 24px;
+      margin: 6px 1px;
+      padding: 0 4px;
+      border-radius: 5px;
+      background: transparent;
+
+      .icon {
+        color: $purple-primary;
+        font-size: 17px;
+      }
+
+      &:hover {
+        background: $bg-elevated;
+      }
+
+      &.muted .icon {
+        color: $text-dim;
+      }
+
+      &.active .icon {
+        color: #ffcc00; // Yellow for caffeine active
+      }
+
+    }
+  }
+
+  button {
+    background: transparent;
+    border: none;
+  }
+}
+
+// Audio Popup - macOS-style
+window.AudioPopup {
+  @include popup-base;
+
+  .audio-popup-content {
+    @include popup-content;
+    min-width: 260px;
+  }
+
+  .audio-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $border-subtle;
+
+    .popup-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-primary;
+      letter-spacing: 0.3px;
+    }
+  }
+
+  .volume-section {
+    margin-bottom: 14px;
+
+    .volume-row {
+      margin-bottom: 10px;
+
+      label {
+        color: $text-secondary;
+        font-size: 12px;
+        font-weight: 500;
+      }
+
+      .volume-value {
+        color: $purple-primary;
+        font-weight: 600;
+        font-size: 12px;
+      }
+    }
+
+    .volume-slider {
+      min-height: 36px;
+
+      trough {
+        min-height: 4px;
+        border-radius: 2px;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      highlight {
+        background: $purple-primary;
+        border-radius: 2px;
+      }
+
+      slider {
+        min-width: 18px;
+        min-height: 18px;
+        margin: -7px;
+        border-radius: 9px;
+        background: #ffffff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+
+        &:hover {
+          background: #f0f0f0;
+        }
+      }
+    }
+  }
+
+  .controls-section {
+    button {
+      @include smooth-button;
+      min-height: 36px;
+      margin: 3px;
+      padding: 0 14px;
+      border-radius: 8px;
+      background: $bg-elevated;
+      color: $text-secondary;
+      font-size: 12px;
+      font-weight: 500;
+
+      &:hover {
+        background: $bg-hover;
+        color: $purple-primary;
+      }
+
+      &.mute-btn.active {
+        background: rgba($red-accent, 0.15);
+        color: $red-accent;
+
+        &:hover {
+          background: rgba($red-accent, 0.25);
+        }
+      }
+
+      &.settings-btn {
+        background: $bg-elevated;
+        color: $text-secondary;
+
+        &:hover {
+          background: $bg-hover;
+          color: $purple-primary;
+        }
+      }
+    }
+  }
+}
+
+// ============================================================================
+// BRIGHTNESS POPUP
+// ============================================================================
+
+window.BrightnessPopup {
+  background: transparent;
+  color: $text-primary;
+  font-family: "Hack Nerd Font", "JetBrains Mono Nerd Font", "JetBrains Mono", monospace;
+  font-size: 13px;
+
+  .brightness-popup-content {
+    background: $bg-dark;
+    border: 2px solid $purple-primary;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 8px;
+    min-width: 300px;
+  }
+
+  .brightness-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $bg-elevated;
+
+    .popup-title {
+      font-size: 15px;
+      font-weight: bold;
+      color: $purple-primary;
+    }
+  }
+
+  .brightness-section {
+    margin-bottom: 12px;
+
+    .brightness-row {
+      margin-bottom: 8px;
+
+      label {
+        color: $text-secondary;
+        font-size: 12px;
+      }
+
+      .brightness-value {
+        color: $purple-primary;
+        font-weight: bold;
+      }
+    }
+
+    .brightness-slider {
+      min-height: 32px;
+
+      trough {
+        min-height: 6px;
+        border-radius: 3px;
+        background: $bg-elevated;
+      }
+
+      highlight {
+        background: linear-gradient(90deg, $purple-secondary, $purple-primary);
+        border-radius: 3px;
+      }
+
+      slider {
+        min-width: 16px;
+        min-height: 16px;
+        border-radius: 8px;
+        background: $purple-primary;
+
+        &:hover {
+          background: #b565e8;
+        }
+      }
+    }
+  }
+
+  .nightlight-section {
+    padding: 10px;
+    background: $bg-elevated;
+    border-radius: 6px;
+    margin-bottom: 8px;
+
+    .nightlight-info {
+      .nightlight-icon {
+        color: $purple-primary;
+        font-size: 16px;
+      }
+
+      .nightlight-label {
+        font-size: 13px;
+        font-weight: 500;
+        color: $text-primary;
+      }
+
+      .nightlight-description {
+        font-size: 11px;
+        color: $text-dim;
+        margin-top: 2px;
+      }
+    }
+
+    .toggle-btn {
+      background: $bg-dark;
+      color: $text-dim;
+      border: 1px solid $text-dim;
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: bold;
+      min-width: 45px;
+
+      &:hover {
+        background: #1a1a1a;
+        border-color: $purple-dim;
+        color: $text-secondary;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, $purple-secondary, $purple-primary);
+        color: #ffffff;
+        border-color: $purple-primary;
+
+        &:hover {
+          background: linear-gradient(135deg, #8e32d9, #af5fee);
+        }
+      }
+    }
+  }
+
+  .settings-btn {
+    background: rgba($purple-primary, 0.1);
+    border: none;
+    border-radius: 6px;
+    padding: 10px;
+    color: $purple-primary;
+    font-size: 13px;
+
+    &:hover {
+      background: rgba($purple-primary, 0.2);
+      color: #b565e8;
+    }
+
+    label {
+      color: inherit;
+    }
+  }
+
+  .auto-section {
+    padding: 8px 10px;
+    background: rgba($purple-dim, 0.1);
+    border-radius: 6px;
+    margin-top: 8px;
+
+    label {
+      font-size: 12px;
+      color: $text-secondary;
+    }
+
+    .toggle-btn {
+      background: $bg-dark;
+      color: $text-dim;
+      border: 1px solid $text-dim;
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-weight: bold;
+      min-width: 40px;
+
+      &:hover {
+        background: #1a1a1a;
+        border-color: $purple-dim;
+        color: $text-secondary;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, $purple-secondary, $purple-primary);
+        color: #ffffff;
+        border-color: $purple-primary;
+
+        &:hover {
+          background: linear-gradient(135deg, #8e32d9, #af5fee);
+        }
+      }
+    }
+  }
+}
+
+// ============================================================================
+// POPUP BACKDROP - Transparent click catcher for closing popups
+// ============================================================================
+
+window.PopupBackdrop {
+  background: transparent;
+}
+
+// ============================================================================
+// WIFI POPUP - macOS-style
+// ============================================================================
+
+window.WifiPopup {
+  @include popup-base;
+
+  .wifi-popup-content {
+    @include popup-content;
+    min-width: 300px;
+  }
+
+  .wifi-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $border-subtle;
+
+    .popup-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-primary;
+      letter-spacing: 0.3px;
+    }
+
+    .toggle-btn {
+      @include smooth-button;
+      background: $bg-elevated;
+      color: $text-dim;
+      border-radius: 10px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 42px;
+
+      &:hover {
+        background: $bg-hover;
+        color: $text-secondary;
+      }
+
+      &.active {
+        background: $purple-primary;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .current-connection {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+    background: $purple-subtle;
+    border-radius: 8px;
+    border: 1px solid rgba($purple-primary, 0.15);
+
+    .connection-status {
+      font-size: 12px;
+      color: $purple-primary;
+      font-weight: 500;
+    }
+  }
+
+  .scanning-indicator {
+    padding: 16px;
+    margin-bottom: 8px;
+
+    .scanning-text {
+      font-size: 12px;
+      color: $text-secondary;
+      font-weight: 500;
+    }
+
+    spinner {
+      color: $purple-primary;
+      min-width: 18px;
+      min-height: 18px;
+    }
+  }
+
+  .networks-list {
+    margin-bottom: 14px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+
+    .network-item {
+      @include smooth-button;
+      padding: 10px 12px;
+      margin: 2px 0;
+      border-radius: 8px;
+      background: transparent;
+
+      &:hover {
+        background: $bg-hover;
+      }
+
+      &.active {
+        background: linear-gradient(135deg, rgba($purple-primary, 0.25), rgba($purple-secondary, 0.2));
+
+        .network-name {
+          color: $purple-primary;
+          font-weight: 600;
+        }
+      }
+
+      &.saved:not(.active) {
+        .network-name {
+          color: $text-primary;
+        }
+      }
+
+      .network-name {
+        font-size: 13px;
+        color: $text-primary;
+      }
+
+      .network-saved {
+        font-size: 12px;
+        color: $green-accent;
+        margin-right: 6px;
+      }
+
+      .network-security {
+        font-size: 12px;
+        margin-right: 6px;
+        color: $text-dim;
+      }
+
+      .network-signal {
+        font-size: 11px;
+        color: $text-dim;
+        font-family: monospace;
+        min-width: 32px;
+      }
+    }
+
+    .empty-label {
+      font-size: 12px;
+      color: $text-dim;
+      padding: 20px;
+    }
+  }
+
+  .password-dialog {
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    margin: 4px;
+
+    .password-network-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .password-back-btn {
+      @include smooth-button;
+      background: transparent;
+      color: $text-dim;
+      padding: 4px 8px;
+      border-radius: 4px;
+      min-width: 24px;
+
+      &:hover {
+        background: $bg-hover;
+        color: $text-primary;
+      }
+    }
+
+    .password-entry {
+      background: $bg-dark;
+      border: 1px solid $border-subtle;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: $text-primary;
+      font-size: 13px;
+      margin: 8px 0;
+
+      &:focus {
+        border-color: $purple-primary;
+      }
+    }
+
+    .password-connect-btn {
+      @include smooth-button;
+      background: $purple-primary;
+      color: white;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-weight: 600;
+      font-size: 13px;
+
+      &:hover {
+        background: $purple-secondary;
+      }
+
+      &:disabled {
+        opacity: 0.6;
+      }
+    }
+
+    .password-error {
+      font-size: 11px;
+      color: $red-accent;
+      margin-top: 6px;
+
+      &.info {
+        color: $text-secondary;
+      }
+    }
+  }
+
+  .controls-section {
+    .settings-btn {
+      @include smooth-button;
+      background: $bg-elevated;
+      border-radius: 8px;
+      padding: 12px;
+      color: $text-secondary;
+      font-size: 12px;
+      font-weight: 500;
+
+      &:hover {
+        background: $bg-hover;
+        color: $purple-primary;
+      }
+    }
+  }
+}
+
+// ============================================================================
+// BLUETOOTH POPUP - macOS-style
+// ============================================================================
+
+// ============================================================================
+// SPOTLIGHT LAUNCHER - macOS-style
+// ============================================================================
+
+window.launcher-window {
+  background: transparent;
+}
+
+.launcher {
+  background: rgba(18, 18, 28, 0.85);
+  border: 2px solid $purple-primary;
+  border-radius: 24px;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.5),
+    0 4px 16px rgba(0, 0, 0, 0.3);
+  min-width: 500px;
+
+  .search-box {
+    padding: 10px 16px;
+  }
+
+  .search-icon {
+    color: $purple-primary;
+    opacity: 0.8;
+  }
+
+  .search-entry {
+    font-size: 16px;
+    font-family: "Noto Sans", "SF Pro Display", sans-serif;
+    color: $text-primary;
+    background: transparent;
+    border: none;
+    outline: none;
+    caret-color: $purple-primary;
+
+    &:focus {
+      outline: none;
+    }
+
+    placeholder {
+      color: $text-dim;
+    }
+  }
+
+  .results-box {
+    padding-bottom: 6px;
+  }
+
+  .results-separator {
+    background: rgba($purple-primary, 0.3);
+    min-height: 1px;
+    margin: 0 12px 6px 12px;
+  }
+
+  .results-list {
+    background: transparent;
+
+    row {
+      background: transparent;
+      border-radius: 12px;
+      margin: 2px 6px;
+      padding: 0;
+
+      &:selected {
+        background: $purple-primary;
+
+        .app-name {
+          color: #0d0d0d;
+          font-weight: 600;
+        }
+      }
+
+      &:hover:not(:selected) {
+        background: rgba($purple-primary, 0.15);
+      }
+    }
+
+    .app-name {
+      font-size: 13px;
+      font-family: "Noto Sans", "SF Pro Display", sans-serif;
+      color: $text-primary;
+    }
+  }
+}
+
+window.BluetoothPopup {
+  @include popup-base;
+
+  .bluetooth-popup-content {
+    @include popup-content;
+    min-width: 280px;
+  }
+
+  .bluetooth-header {
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid $border-subtle;
+
+    .popup-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: $text-primary;
+      letter-spacing: 0.3px;
+    }
+
+    .toggle-btn {
+      @include smooth-button;
+      background: $bg-elevated;
+      color: $text-dim;
+      border-radius: 10px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      min-width: 42px;
+
+      &:hover {
+        background: $bg-hover;
+        color: $text-secondary;
+      }
+
+      &.active {
+        background: $purple-primary;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .devices-section {
+    margin-bottom: 14px;
+
+    .section-title {
+      font-size: 10px;
+      color: $text-dim;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .device-list {
+      padding: 4px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+
+    .device-row {
+      @include smooth-button;
+      padding: 10px 12px;
+      margin: 2px 0;
+      border-radius: 8px;
+      background: transparent;
+
+      &:hover {
+        background: $bg-hover;
+      }
+
+      .device-icon {
+        font-size: 20px;
+        color: $purple-primary;
+        min-width: 28px;
+      }
+
+      .device-name {
+        font-size: 13px;
+        color: $text-primary;
+        font-weight: 500;
+      }
+
+      .device-action-btn {
+        @include smooth-button;
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        font-weight: 600;
+
+        &.connect {
+          background: $purple-subtle;
+          color: $purple-primary;
+
+          &:hover {
+            background: rgba($purple-primary, 0.2);
+          }
+        }
+
+        &.disconnect {
+          background: rgba($red-accent, 0.12);
+          color: $red-accent;
+
+          &:hover {
+            background: rgba($red-accent, 0.2);
+          }
+        }
+      }
+    }
+
+    .empty-label {
+      font-size: 12px;
+      color: $text-dim;
+      padding: 20px;
+    }
+  }
+
+  .controls-section {
+    .settings-btn {
+      @include smooth-button;
+      background: $bg-elevated;
+      border-radius: 8px;
+      padding: 12px;
+      color: $text-secondary;
+      font-size: 12px;
+      font-weight: 500;
+
+      &:hover {
+        background: $bg-hover;
+        color: $purple-primary;
+      }
+    }
+  }
+}
