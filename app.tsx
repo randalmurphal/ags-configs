@@ -14,6 +14,7 @@ import { AudioPopup } from "./widgets/popups/audio/AudioPopup"
 import { BrightnessPopup } from "./widgets/popups/brightness/BrightnessPopup"
 import { WifiPopup } from "./widgets/popups/network/WifiPopup"
 import BluetoothPopup from "./widgets/popups/bluetooth/BluetoothPopup"
+import { PowerPopup } from "./widgets/popups/power/PowerPopup"
 
 // Export toggleLauncher for hyprctl access
 ;(globalThis as any).toggleLauncher = toggleLauncher
@@ -38,6 +39,7 @@ app.start({
       <BrightnessPopup />,
       <WifiPopup />,
       <BluetoothPopup />,
+      <PowerPopup />,
       Launcher(),
     ]
   },

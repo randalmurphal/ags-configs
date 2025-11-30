@@ -11,7 +11,7 @@ export const LATITUDE = 30.27  // degrees North
 export const LONGITUDE = -97.74  // degrees West (negative)
 
 // Popup window names for management
-export const POPUP_NAMES = ["audio-popup", "brightness-popup", "wifi-popup", "bluetooth-popup"] as const
+export const POPUP_NAMES = ["audio-popup", "brightness-popup", "wifi-popup", "bluetooth-popup", "power-popup"] as const
 
 // Volume icon based on level and mute state
 export function getVolumeIcon(volume: number, muted: boolean): string {

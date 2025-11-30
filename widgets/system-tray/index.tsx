@@ -1,8 +1,8 @@
 import Audio from "./Audio"
 import Brightness from "./Brightness"
-import Network from "./Network"
 import Bluetooth from "./Bluetooth"
 import Caffeine from "./Caffeine"
+import Power from "./Power"
 
 export default function SystemTray() {
   return (
@@ -11,7 +11,7 @@ export default function SystemTray() {
       <Audio />
       <Brightness />
       <Bluetooth />
-      <Network />
+      <Power />
     </box>
   )
 }
