@@ -94,8 +94,10 @@ ags toggle launcher
 │   │   ├── Bluetooth.tsx   # Bluetooth status button
 │   │   └── Caffeine.tsx    # Screen sleep toggle
 │   └── popups/             # Popup windows
-│       ├── backdrop.tsx    # Click-outside-to-close layer
-│       ├── audio/AudioPopup.tsx
+│       ├── backdrop.tsx    # Click-outside-to-close layer (non-ags namespace to avoid blur)
+│       ├── audio/AudioPopup.tsx  # Volume, device selection, media controls
+│       ├── media/
+│       │   └── media-utils.ts    # playerctl wrapper with ignored players filter
 │       ├── brightness/
 │       │   ├── BrightnessPopup.tsx
 │       │   └── night-light.ts  # Sunrise/sunset calculation
@@ -150,6 +152,21 @@ function debouncedFn() {
 }
 ```
 
+### Dynamic Window Resize (Layer Shell)
+Layer shell windows don't auto-shrink when content is hidden. Use `set_default_size(-1, -1)` to force recalculation:
+```typescript
+// Store window reference
+let winRef: Astal.Window | null = null
+
+function triggerWindowResize() {
+  if (winRef) winRef.set_default_size(-1, -1)
+}
+
+// Call after visibility changes (e.g., dropdown toggle)
+optionsBox.visible = !optionsBox.visible
+triggerWindowResize()
+```
+
 ## Hyprland Integration
 
 ### Keybinds (in hyprland.conf)
@@ -165,6 +182,9 @@ layerrule = ignorezero, ags-.*
 layerrule = noanim, ags-launcher  # Disable animation for dynamic resize
 ```
 
+**Note:** The backdrop uses namespace `popup-backdrop` (not `ags-*`) to avoid blur.
+The `ignorezero` rule ignores transparent areas for input - backdrop needs minimal alpha (0.01) to receive clicks.
+
 ### Workspace-to-Monitor Mapping
 ```typescript
 const WORKSPACE_MONITOR_MAP: Record<string, number[]> = {
@@ -177,11 +197,11 @@ const WORKSPACE_MONITOR_MAP: Record<string, number[]> = {
 ## Future Work
 
 - [ ] Add window representation to bar (like macOS dock highlighting)
-- [ ] Power menu widget
 - [ ] Notification center
-- [ ] Calendar popup for clock
-- [ ] Media controls in audio popup
 - [ ] VPN toggle in network popup
+- [x] Power menu widget
+- [x] Calendar popup for clock
+- [x] Media controls in audio popup (with playerctl ignore for wallpaper players)
 
 ## Coding Style
 
@@ -205,4 +225,5 @@ const WORKSPACE_MONITOR_MAP: Record<string, number[]> = {
 - `astal` libraries (Apps, Hyprland, WirePlumber)
 - `nmcli` for WiFi management
 - `bluetoothctl` for Bluetooth
+- `playerctl` for media controls (uses `-i` flag to ignore wallpaper players like mpv)
 - Nerd Fonts for icons (Symbols Nerd Font)

@@ -10,13 +10,13 @@ export default function PopupBackdrop() {
   const win = (
     <window
       visible={false}
-      namespace="ags-popup-backdrop"
+      namespace="popup-backdrop"
       name="popup-backdrop"
       cssClasses={["PopupBackdrop"]}
       anchor={TOP | BOTTOM | LEFT | RIGHT}
       exclusivity={Astal.Exclusivity.IGNORE}
       layer={Astal.Layer.TOP}
-      keymode={Astal.Keymode.NONE}
+      keymode={Astal.Keymode.ON_DEMAND}
       application={app}
     >
       <box hexpand vexpand />

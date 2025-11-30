@@ -1,5 +1,6 @@
 import GLib from "gi://GLib"
 import { createPoll } from "ags/time"
+import { togglePopup } from "../../lib/popup-manager"
 
 export default function Clock() {
   const time = createPoll("--:--", 1000, () => {
@@ -13,9 +14,14 @@ export default function Clock() {
   })
 
   return (
-    <box cssClasses={["clock"]}>
-      <label cssClasses={["time"]} label={time} />
-      <label cssClasses={["date"]} label={date} />
-    </box>
+    <button
+      cssClasses={["clock"]}
+      onClicked={() => togglePopup("calendar-popup")}
+    >
+      <box>
+        <label cssClasses={["time"]} label={time} />
+        <label cssClasses={["date"]} label={date} />
+      </box>
+    </button>
   )
 }

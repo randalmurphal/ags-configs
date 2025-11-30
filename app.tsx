@@ -15,6 +15,10 @@ import { BrightnessPopup } from "./widgets/popups/brightness/BrightnessPopup"
 import { WifiPopup } from "./widgets/popups/network/WifiPopup"
 import BluetoothPopup from "./widgets/popups/bluetooth/BluetoothPopup"
 import { PowerPopup } from "./widgets/popups/power/PowerPopup"
+import { CalendarPopup } from "./widgets/popups/calendar/CalendarPopup"
+// MediaPopup removed - media controls now integrated into AudioPopup
+import { NotificationPopup } from "./widgets/popups/notifications/NotificationPopup"
+import { NotificationOSD } from "./widgets/popups/notifications/NotificationOSD"
 
 // Export toggleLauncher for hyprctl access
 ;(globalThis as any).toggleLauncher = toggleLauncher
@@ -40,6 +44,9 @@ app.start({
       <WifiPopup />,
       <BluetoothPopup />,
       <PowerPopup />,
+      <CalendarPopup />,
+      <NotificationPopup />,
+      <NotificationOSD />,
       Launcher(),
     ]
   },
