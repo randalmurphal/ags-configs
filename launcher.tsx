@@ -15,6 +15,7 @@ let listBox: Gtk.ListBox | null = null
 let searchEntry: Gtk.Entry | null = null
 let resultsBox: Gtk.Box | null = null
 let mainBox: Gtk.Box | null = null
+let launcherWindow: Astal.Window | null = null
 let debounceTimer: number | null = null
 
 // Lazy init apps to avoid startup lag
@@ -26,7 +27,7 @@ function getApps() {
 }
 
 function updateResults() {
-  if (!listBox || !resultsBox || !mainBox) return
+  if (!listBox || !resultsBox || !mainBox || !launcherWindow) return
 
   // Clear existing children
   let child = listBox.get_first_child()
@@ -39,7 +40,8 @@ function updateResults() {
   if (searchText.length === 0) {
     results = []
     resultsBox.visible = false
-    mainBox.queue_resize()
+    // Force window to shrink by setting minimal default size
+    launcherWindow.set_default_size(1, 1)
     return
   }
 
@@ -47,7 +49,7 @@ function updateResults() {
 
   if (results.length === 0) {
     resultsBox.visible = false
-    mainBox.queue_resize()
+    launcherWindow.set_default_size(1, 1)
     return
   }
 
@@ -96,8 +98,8 @@ function updateResults() {
   const firstRow = listBox.get_row_at_index(0)
   if (firstRow) listBox.select_row(firstRow)
 
-  // Force resize
-  mainBox.queue_resize()
+  // Force window to recalculate size
+  launcherWindow.set_default_size(1, 1)
 }
 
 function debouncedUpdate() {
@@ -164,7 +166,7 @@ export function toggleLauncher() {
 }
 
 export function Launcher() {
-  const window = new Astal.Window({
+  launcherWindow = new Astal.Window({
     name: "launcher",
     namespace: "ags-launcher",
     application: app,
@@ -174,7 +176,7 @@ export function Launcher() {
     visible: false,
     marginTop: 180,
   })
-  window.add_css_class("launcher-window")
+  launcherWindow.add_css_class("launcher-window")
 
   mainBox = new Gtk.Box({
     orientation: Gtk.Orientation.VERTICAL,
@@ -264,8 +266,8 @@ export function Launcher() {
   mainBox.append(searchBox)
   mainBox.append(resultsBox)
 
-  window.connect("notify::visible", () => {
-    if (!window.visible) {
+  launcherWindow.connect("notify::visible", () => {
+    if (!launcherWindow.visible) {
       searchText = ""
       if (searchEntry) searchEntry.set_text("")
       if (debounceTimer) {
@@ -276,6 +278,6 @@ export function Launcher() {
     }
   })
 
-  window.set_child(mainBox)
-  return window
+  launcherWindow.set_child(mainBox)
+  return launcherWindow
 }

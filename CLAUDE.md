@@ -72,13 +72,42 @@ ags toggle launcher
 
 ```
 .
-├── app.tsx           # Main entry, bar, popups, system tray
-├── launcher.tsx      # Spotlight-style app launcher
-├── style.scss        # All styles (SCSS with variables)
-├── widget/           # Additional widgets (unused Bar.tsx)
-├── @girs/            # Type definitions (gitignored)
-├── screenshots/      # Reference screenshots
-└── CLAUDE.md         # This file
+├── app.tsx                 # Minimal entry point (~44 lines)
+├── launcher.tsx            # Spotlight-style app launcher
+├── style.scss              # All styles (SCSS with variables)
+├── lib/                    # Shared utilities
+│   ├── constants.ts        # Workspace mapping, icons, location
+│   ├── system-commands.ts  # GLib wrappers (spawn, file ops)
+│   ├── popup-manager.ts    # Popup state management
+│   └── ui-components.ts    # Reusable UI (toggle buttons, escape handlers)
+├── widgets/
+│   ├── bar/                # Status bar components
+│   │   ├── index.tsx       # Bar window composition
+│   │   ├── Workspaces.tsx  # Per-monitor workspace indicators
+│   │   ├── Clients.tsx     # Active window icons
+│   │   └── Clock.tsx       # Time and date display
+│   ├── system-tray/        # Tray button components
+│   │   ├── index.tsx       # SystemTray composition
+│   │   ├── Audio.tsx       # Volume button
+│   │   ├── Brightness.tsx  # Brightness button
+│   │   ├── Network.tsx     # WiFi status button
+│   │   ├── Bluetooth.tsx   # Bluetooth status button
+│   │   └── Caffeine.tsx    # Screen sleep toggle
+│   └── popups/             # Popup windows
+│       ├── backdrop.tsx    # Click-outside-to-close layer
+│       ├── audio/AudioPopup.tsx
+│       ├── brightness/
+│       │   ├── BrightnessPopup.tsx
+│       │   └── night-light.ts  # Sunrise/sunset calculation
+│       ├── network/
+│       │   ├── WifiPopup.tsx
+│       │   └── network-utils.ts
+│       └── bluetooth/
+│           ├── BluetoothPopup.tsx
+│           └── bluetooth-utils.ts
+├── @girs/                  # Type definitions (gitignored)
+├── screenshots/            # Reference screenshots
+└── CLAUDE.md               # This file
 ```
 
 ## Key Patterns
@@ -133,6 +162,7 @@ bind = ALT, SPACE, exec, ags toggle launcher
 ```
 layerrule = blur, ags-.*
 layerrule = ignorezero, ags-.*
+layerrule = noanim, ags-launcher  # Disable animation for dynamic resize
 ```
 
 ### Workspace-to-Monitor Mapping
@@ -146,10 +176,6 @@ const WORKSPACE_MONITOR_MAP: Record<string, number[]> = {
 
 ## Future Work
 
-- [ ] Split `app.tsx` into modular components:
-  - `widgets/bar/` - Workspaces, Clients, Clock, SystemTray
-  - `widgets/popups/` - Audio, Brightness, WiFi, Bluetooth
-  - `lib/` - Shared utilities, popup management
 - [ ] Add window representation to bar (like macOS dock highlighting)
 - [ ] Power menu widget
 - [ ] Notification center
